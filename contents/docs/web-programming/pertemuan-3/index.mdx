@@ -1,0 +1,119 @@
+---
+title: Pertemuan 3 - React JS + Vite untuk Note App
+description: Setup React dengan Vite dan memecah UI Note App menjadi komponen.
+---
+
+## 📌 Pertemuan 3: React JS + Vite untuk Note App
+
+Pertemuan ini membahas cara memulai React menggunakan Vite dan memecah UI Note App menjadi komponen agar lebih mudah dikembangkan.
+
+---
+
+### 🎯 Tujuan Pembelajaran
+
+- Menginisialisasi proyek React dengan Vite.
+- Memahami JSX dan struktur komponen.
+- Membagi UI Note App menjadi komponen reusable.
+- Merender list catatan dari data statis.
+
+---
+
+### 🚀 Setup React dengan Vite
+
+```bash
+npm create vite@latest note-app -- --template react
+cd note-app
+npm install
+npm run dev
+```
+
+---
+
+### 🧠 Materi Utama
+
+#### 1. Komponen Dasar
+
+```jsx
+export function NoteHeader() {
+  return (
+    <header className="page-header">
+      <h1>Note App</h1>
+      <p>Catat ide, tugas, dan ringkasan kelas dalam satu tempat.</p>
+    </header>
+  );
+}
+```
+
+#### 2. Komponen dengan Props
+
+```jsx
+export function NoteCard({ title, body }) {
+  return (
+    <article className="note-card">
+      <h3>{title}</h3>
+      <p>{body}</p>
+    </article>
+  );
+}
+```
+
+#### 3. List Rendering
+
+```jsx
+const notes = [
+  { id: "n-1", title: "Setup proyek", body: "Gunakan Vite + React." },
+  { id: "n-2", title: "Desain UI", body: "Buat layout dengan CSS." },
+  { id: "n-3", title: "Rencana fitur", body: "Tambah CRUD note." },
+];
+
+export function NoteList() {
+  return (
+    <section className="note-list">
+      {notes.map((note) => (
+        <NoteCard key={note.id} title={note.title} body={note.body} />
+      ))}
+    </section>
+  );
+}
+```
+
+---
+
+### 🧩 Studi Kasus: Menyusun App
+
+```jsx
+import { NoteHeader } from "./components/NoteHeader";
+import { NoteList } from "./components/NoteList";
+
+export default function App() {
+  return (
+    <main className="page">
+      <NoteHeader />
+      <NoteList />
+    </main>
+  );
+}
+```
+
+---
+
+### ✅ Checklist Hasil
+
+- Proyek React berhasil berjalan di browser.
+- UI Note App terpecah menjadi komponen.
+- Data catatan dirender dari array statis.
+
+---
+
+### 🧪 Tugas Mini
+
+1. Tambahkan komponen `NoteForm` berisi input judul dan textarea.  
+2. Buat komponen `NoteFooter` berisi teks copyright.  
+3. Render semua komponen di `App.jsx`.  
+
+---
+
+### 📎 Referensi Cepat
+
+- Vite: https://vitejs.dev/guide/  
+- React Components: https://react.dev/learn/your-first-component  

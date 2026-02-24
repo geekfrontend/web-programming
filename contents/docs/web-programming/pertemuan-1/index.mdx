@@ -1,0 +1,589 @@
+---
+title: Pertemuan 1 - HTML Dasar
+description: Pengenalan HTML, semantic tags, dan struktur halaman web sederhana.
+---
+
+## 📌 Pertemuan 1: HTML Dasar
+
+---
+
+### 🧭 Pembuka
+
+**Deskripsi singkat**  
+HTML adalah fondasi semua halaman web. Di pertemuan ini kamu akan mengenal tag-tag inti yang paling sering dipakai dan memahami cara menyusun halaman dengan struktur yang rapi.
+
+**Tujuan pembelajaran**
+
+- Memahami struktur dokumen HTML dari awal sampai akhir.
+- Mengenal tag-tag penting dan kapan menggunakannya.
+- Mampu membuat satu halaman HTML sederhana.
+- Siap menerapkan struktur ke studi kasus Note App.
+
+---
+
+## � Konsep Dasar HTML (Teori + Contoh Tag)
+
+### doctype
+
+**Fungsi**: Memberi tahu browser versi HTML yang dipakai.  
+**Kapan digunakan**: Selalu di baris paling atas dokumen.  
+**Contoh kode**:
+
+```html
+<!doctype html>
+```
+
+**Tips**: Gunakan `<!doctype html>` untuk HTML5.
+
+### html
+
+**Fungsi**: Elemen root dari seluruh dokumen.  
+**Kapan digunakan**: Membungkus `head` dan `body`.  
+**Contoh kode**:
+
+```html
+<html lang="id">
+  ...
+</html>
+```
+
+**Tips**: Isi atribut `lang` untuk aksesibilitas.
+
+### head
+
+**Fungsi**: Menyimpan metadata dan resource.  
+**Kapan digunakan**: Di dalam `html`, sebelum `body`.  
+**Contoh kode**:
+
+```html
+<head>
+  <meta charset="UTF-8" />
+  <title>Halaman HTML</title>
+</head>
+```
+
+**Tips**: Letakkan link CSS dan metadata di sini.
+
+### body
+
+**Fungsi**: Berisi konten yang tampil di halaman.  
+**Kapan digunakan**: Setelah `head`.  
+**Contoh kode**:
+
+```html
+<body>
+  <h1>Halo HTML</h1>
+</body>
+```
+
+**Tips**: Semua elemen visual ada di `body`.
+
+### meta charset
+
+**Fungsi**: Mengatur karakter teks.  
+**Kapan digunakan**: Di dalam `head`.  
+**Contoh kode**:
+
+```html
+<meta charset="UTF-8" />
+```
+
+**Tips**: UTF-8 mendukung berbagai bahasa.
+
+### meta viewport
+
+**Fungsi**: Mengatur tampilan di perangkat mobile.  
+**Kapan digunakan**: Di dalam `head`.  
+**Contoh kode**:
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+```
+
+**Tips**: Wajib untuk layout responsif.
+
+### title
+
+**Fungsi**: Judul halaman di tab browser.  
+**Kapan digunakan**: Di dalam `head`.  
+**Contoh kode**:
+
+```html
+<title>Halaman HTML</title>
+```
+
+**Tips**: Buat judul singkat dan jelas.
+
+### h1–h6
+
+**Fungsi**: Membuat hierarki judul.  
+**Kapan digunakan**: Saat membuat struktur konten.  
+**Contoh kode**:
+
+```html
+<h1>Judul Utama</h1>
+<h2>Sub Judul</h2>
+<h3>Bagian Kecil</h3>
+```
+
+**Tips**: Gunakan satu `h1` per halaman.
+
+### p
+
+**Fungsi**: Menulis paragraf.  
+**Kapan digunakan**: Untuk teks isi.  
+**Contoh kode**:
+
+```html
+<p>Ini adalah paragraf singkat.</p>
+```
+
+**Tips**: Hindari banyak `<br>` untuk spasi.
+
+### span
+
+**Fungsi**: Membungkus teks kecil tanpa membuat baris baru.  
+**Kapan digunakan**: Untuk styling kata tertentu.  
+**Contoh kode**:
+
+```html
+<p>Status: <span>Aktif</span></p>
+```
+
+**Tips**: Cocok untuk highlight kata.
+
+### strong
+
+**Fungsi**: Menegaskan teks penting.  
+**Kapan digunakan**: Untuk penekanan makna.  
+**Contoh kode**:
+
+```html
+<p>Ini adalah <strong>informasi penting</strong>.</p>
+```
+
+**Tips**: Gunakan untuk makna, bukan hanya gaya.
+
+### em
+
+**Fungsi**: Memberi penekanan/intonasi.  
+**Kapan digunakan**: Saat ingin menekankan kata.  
+**Contoh kode**:
+
+```html
+<p>Silakan isi <em>semua</em> data.</p>
+```
+
+**Tips**: Jangan berlebihan agar tetap terbaca.
+
+### header
+
+**Fungsi**: Area pembuka halaman atau section.  
+**Kapan digunakan**: Untuk judul dan intro.  
+**Contoh kode**:
+
+```html
+<header>
+  <h1>Portal Belajar</h1>
+</header>
+```
+
+**Tips**: Gunakan sekali untuk header utama.
+
+### nav
+
+**Fungsi**: Area navigasi.  
+**Kapan digunakan**: Saat ada menu link.  
+**Contoh kode**:
+
+```html
+<nav>
+  <a href="#">Beranda</a>
+  <a href="#">Tentang</a>
+</nav>
+```
+
+**Tips**: Gunakan untuk link navigasi utama.
+
+### main
+
+**Fungsi**: Konten utama halaman.  
+**Kapan digunakan**: Satu kali per halaman.  
+**Contoh kode**:
+
+```html
+<main>
+  <section>Konten utama</section>
+</main>
+```
+
+**Tips**: Jangan taruh `main` di dalam `article`.
+
+### section
+
+**Fungsi**: Mengelompokkan bagian konten.  
+**Kapan digunakan**: Untuk bagian dengan tema tertentu.  
+**Contoh kode**:
+
+```html
+<section>
+  <h2>Fitur</h2>
+</section>
+```
+
+**Tips**: Pastikan ada heading di dalamnya.
+
+### article
+
+**Fungsi**: Konten mandiri seperti kartu atau postingan.  
+**Kapan digunakan**: Untuk item yang bisa berdiri sendiri.  
+**Contoh kode**:
+
+```html
+<article>
+  <h3>Artikel Utama</h3>
+  <p>Ringkasan singkat.</p>
+</article>
+```
+
+**Tips**: Cocok untuk card atau blog post.
+
+### aside
+
+**Fungsi**: Konten tambahan di samping utama.  
+**Kapan digunakan**: Untuk catatan, iklan, atau tips.  
+**Contoh kode**:
+
+```html
+<aside>
+  <p>Tips: gunakan semantic tags.</p>
+</aside>
+```
+
+**Tips**: Letakkan di samping konten utama.
+
+### footer
+
+**Fungsi**: Bagian penutup halaman/section.  
+**Kapan digunakan**: Untuk copyright atau info kontak.  
+**Contoh kode**:
+
+```html
+<footer>Copyright 2026</footer>
+```
+
+**Tips**: Konsisten di seluruh halaman.
+
+### img
+
+**Fungsi**: Menampilkan gambar.  
+**Kapan digunakan**: Saat ada media visual.  
+**Contoh kode**:
+
+```html
+<img src="assets/produk.png" alt="Ilustrasi produk" />
+```
+
+**Tips**: Selalu isi `alt` untuk aksesibilitas.
+
+### a
+
+**Fungsi**: Membuat link.  
+**Kapan digunakan**: Untuk navigasi atau referensi.  
+**Contoh kode**:
+
+```html
+<a href="https://developer.mozilla.org">Belajar HTML</a>
+```
+
+**Tips**: Gunakan teks link yang jelas.
+
+### ul
+
+**Fungsi**: Membuat daftar tanpa urutan.  
+**Kapan digunakan**: Untuk daftar fitur atau menu.  
+**Contoh kode**:
+
+```html
+<ul>
+  <li>Fitur utama</li>
+  <li>Keunggulan layanan</li>
+</ul>
+```
+
+**Tips**: Gunakan `li` sebagai itemnya.
+
+### ol
+
+**Fungsi**: Membuat daftar berurutan.  
+**Kapan digunakan**: Untuk langkah-langkah.  
+**Contoh kode**:
+
+```html
+<ol>
+  <li>Buka halaman</li>
+  <li>Isi form</li>
+</ol>
+```
+
+**Tips**: Cocok untuk tutorial.
+
+### li
+
+**Fungsi**: Item dalam list.  
+**Kapan digunakan**: Di dalam `ul` atau `ol`.  
+**Contoh kode**:
+
+```html
+<ul>
+  <li>Item pertama</li>
+</ul>
+```
+
+**Tips**: Jangan gunakan `li` di luar list.
+
+### div
+
+**Fungsi**: Pembungkus umum tanpa makna khusus.  
+**Kapan digunakan**: Saat butuh grouping untuk layout.  
+**Contoh kode**:
+
+```html
+<div class="card">
+  <h3>Judul</h3>
+</div>
+```
+
+**Tips**: Lebih baik pakai semantic tags jika ada.
+
+### form
+
+**Fungsi**: Membungkus input data.  
+**Kapan digunakan**: Saat butuh kirim data.  
+**Contoh kode**:
+
+```html
+<form>...</form>
+```
+
+**Tips**: Gunakan `method` jika sudah kirim data.
+
+### label
+
+**Fungsi**: Menjelaskan input.  
+**Kapan digunakan**: Untuk setiap input.  
+**Contoh kode**:
+
+```html
+<label>
+  Nama
+  <input type="text" />
+</label>
+```
+
+**Tips**: Label membantu aksesibilitas.
+
+### input
+
+**Fungsi**: Menerima input pengguna.  
+**Kapan digunakan**: Untuk text, email, tanggal, pencarian.  
+**Contoh kode**:
+
+```html
+<input type="text" placeholder="Nama lengkap" />
+<input type="email" placeholder="email@domain.com" />
+<input type="date" />
+<input type="search" placeholder="Cari..." />
+```
+
+**Tips**: Pilih `type` sesuai kebutuhan.
+
+### textarea
+
+**Fungsi**: Input teks panjang.  
+**Kapan digunakan**: Untuk komentar atau catatan.  
+**Contoh kode**:
+
+```html
+<textarea placeholder="Tulis pesan"></textarea>
+```
+
+**Tips**: Gunakan untuk isi yang panjang.
+
+### button
+
+**Fungsi**: Tombol aksi.  
+**Kapan digunakan**: Untuk submit atau aksi UI.  
+**Contoh kode**:
+
+```html
+<button type="submit">Simpan</button>
+```
+
+**Tips**: Tentukan `type` agar jelas.
+
+### class
+
+**Fungsi**: Menandai elemen untuk styling.  
+**Kapan digunakan**: Saat membuat CSS.  
+**Contoh kode**:
+
+```html
+<section class="content-list">...</section>
+```
+
+**Tips**: Gunakan nama class yang konsisten.
+
+### id
+
+**Fungsi**: Identitas unik satu elemen.  
+**Kapan digunakan**: Untuk anchor atau JS.  
+**Contoh kode**:
+
+```html
+<section id="content-list">...</section>
+```
+
+**Tips**: Satu id hanya untuk satu elemen.
+
+### placeholder
+
+**Fungsi**: Teks petunjuk di input.  
+**Kapan digunakan**: Saat butuh hint singkat.  
+**Contoh kode**:
+
+```html
+<input type="text" placeholder="Nama lengkap" />
+```
+
+**Tips**: Jangan jadikan placeholder sebagai label utama.
+
+### type
+
+**Fungsi**: Menentukan jenis input atau tombol.  
+**Kapan digunakan**: Di `input` atau `button`.  
+**Contoh kode**:
+
+```html
+<input type="search" /> <button type="submit">Kirim</button>
+```
+
+**Tips**: `type="submit"` untuk submit form.
+
+---
+
+## ✅ Mini Contoh Halaman HTML Lengkap
+
+```html
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Halaman Sederhana</title>
+  </head>
+  <body>
+    <header>
+      <h1>Belajar HTML</h1>
+    </header>
+    <main>
+      <section>
+        <article>
+          <h2>Artikel Utama</h2>
+          <p>Ini contoh artikel singkat.</p>
+        </article>
+      </section>
+      <section>
+        <h2>Form Kontak</h2>
+        <form>
+          <label>
+            Nama
+            <input type="text" placeholder="Nama lengkap" />
+          </label>
+          <button type="submit">Kirim</button>
+        </form>
+      </section>
+    </main>
+    <footer>Copyright 2026</footer>
+  </body>
+</html>
+```
+
+---
+
+## 🧩 Implementasi Project: Note App
+
+**Penjelasan project**  
+Kita akan membuat halaman Note App sederhana dengan struktur semantic, form input judul dan isi, daftar catatan dummy, dan footer.
+
+**Struktur folder**
+
+```
+note-app/
+  index.html
+  styles.css
+  assets/
+```
+
+**HTML lengkap Note App**
+
+```html
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Note App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>Note App</h1>
+      <p>Catat ide, tugas, dan ringkasan kelas dalam satu tempat.</p>
+    </header>
+    <main class="page">
+      <section class="note-form">
+        <h2>Catatan Baru</h2>
+        <form>
+          <label>
+            Judul
+            <input type="text" placeholder="Judul catatan" />
+          </label>
+          <label>
+            Isi
+            <textarea placeholder="Tulis isi catatan..."></textarea>
+          </label>
+          <button type="submit">Simpan</button>
+        </form>
+      </section>
+      <section class="note-list">
+        <h2>Daftar Catatan</h2>
+        <article class="note-card">
+          <h3>Catatan Pertama</h3>
+          <p>Contoh isi catatan untuk tampilan awal.</p>
+        </article>
+        <article class="note-card">
+          <h3>Checklist Tugas</h3>
+          <p>Tambahkan 3 tugas harian.</p>
+        </article>
+      </section>
+    </main>
+    <footer class="page-footer">Dibuat untuk kelas Web Programming</footer>
+  </body>
+</html>
+```
+
+**Penjelasan bagian per bagian**
+
+- **Header**: judul aplikasi dan deskripsi singkat.
+- **Form**: input judul dan isi catatan.
+- **List catatan**: contoh dua catatan dummy.
+- **Footer**: informasi penutup halaman.
+
+---
+
+## ✅ Checklist Hasil Belajar
+
+- Memahami tag HTML penting dan fungsinya.
+- Mampu membuat halaman HTML lengkap.
+- Berhasil menyusun struktur Note App sederhana.

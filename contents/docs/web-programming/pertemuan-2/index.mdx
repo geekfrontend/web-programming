@@ -1,0 +1,460 @@
+---
+title: Pertemuan 2 - CSS Dasar
+description: Dasar CSS untuk mempercantik HTML dan menata layout Note App.
+---
+
+## 📌 Pertemuan 2: CSS Dasar
+
+---
+
+### 🧭 Pembuka
+
+**Judul**: Pertemuan 2 – CSS Dasar  
+**Deskripsi singkat**: CSS membuat tampilan HTML lebih rapi, enak dibaca, dan responsif. Setelah memahami konsep dasar, kita terapkan langsung ke Note App.  
+**Tujuan pembelajaran**:
+
+- Siswa memahami cara menambahkan CSS ke HTML.
+- Siswa mengenal selector dan box model.
+- Siswa mampu menata layout, typography, dan form.
+- Siswa dapat membuat tampilan Note App yang modern dan minimalis.
+
+---
+
+## 🧠 Konsep Dasar CSS
+
+### Cara Menambahkan CSS
+
+**Penjelasan sederhana**: CSS bisa ditulis inline, internal, atau di file terpisah.  
+**Contoh kode**:
+
+```html
+<p style="color: blue;">Inline CSS</p>
+<style>
+  p {
+    color: green;
+  }
+</style>
+<link rel="stylesheet" href="styles.css" />
+```
+
+**Kapan digunakan**:
+
+- Inline: cepat untuk uji coba.
+- Internal: untuk satu halaman saja.
+- External: terbaik untuk proyek nyata.
+
+**Best practice**: Gunakan file `styles.css` sebagai sumber utama.
+
+### Selector CSS
+
+**Penjelasan sederhana**: Selector memilih elemen yang akan diberi style.  
+**Contoh kode**:
+
+```css
+h1 {
+  color: #111827;
+}
+.note-card {
+  padding: 16px;
+}
+#note-list {
+  gap: 16px;
+}
+.note-list .note-card {
+  background: #ffffff;
+}
+```
+
+**Kapan digunakan**:
+
+- Element selector untuk styling dasar.
+- Class selector untuk elemen sejenis.
+- Id selector untuk elemen unik.
+- Descendant selector untuk elemen di dalam elemen lain.
+
+**Best practice**: Utamakan class selector agar konsisten.
+
+### Box Model
+
+**Penjelasan sederhana**: Setiap elemen punya content, padding, border, dan margin.  
+**Contoh kode**:
+
+```css
+.note-card {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 12px;
+}
+```
+
+**Kapan digunakan**: Saat mengatur jarak dan ukuran elemen.  
+**Best practice**: Pakai `box-sizing: border-box`.
+
+### Typography
+
+**Penjelasan sederhana**: Mengatur font, ukuran teks, dan jarak antar baris.  
+**Contoh kode**:
+
+```css
+body {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: left;
+  font-weight: 400;
+}
+```
+
+**Kapan digunakan**: Agar teks nyaman dibaca.  
+**Best practice**: Gunakan 1–2 font saja.
+
+### Color & Background
+
+**Penjelasan sederhana**: Memberi warna teks dan latar agar UI jelas.  
+**Contoh kode**:
+
+```css
+body {
+  color: #111827;
+  background-color: #f5f6f8;
+}
+```
+
+**Kapan digunakan**: Saat membuat kontras dan hierarki visual.  
+**Best practice**: Pakai warna netral dan satu warna utama.
+
+### Layout Dasar
+
+**Penjelasan sederhana**: Mengatur posisi elemen di halaman.  
+**Contoh kode**:
+
+```css
+.page {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+```
+
+**Kapan digunakan**: Saat menata header, form, dan list.  
+**Best practice**: Mulai dari layout sederhana dulu.
+
+### Width & Spacing
+
+**Penjelasan sederhana**: Mengatur lebar konten dan jarak tepi.  
+**Contoh kode**:
+
+```css
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+```
+
+**Kapan digunakan**: Agar konten berada di tengah.  
+**Best practice**: Gunakan `max-width` agar tidak terlalu lebar.
+
+### Styling Form
+
+**Penjelasan sederhana**: Membuat input terlihat rapi dan konsisten.  
+**Contoh kode**:
+
+```css
+input,
+textarea {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+input:focus,
+textarea:focus {
+  outline: 2px solid #2563eb;
+  border-color: transparent;
+}
+```
+
+**Kapan digunakan**: Saat membuat form mudah dipakai.  
+**Best practice**: Tambahkan fokus state yang jelas.
+
+### Card UI
+
+**Penjelasan sederhana**: Kartu dibuat dengan radius dan shadow.  
+**Contoh kode**:
+
+```css
+.note-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  padding: 16px;
+}
+```
+
+**Kapan digunakan**: Untuk menampilkan item catatan.  
+**Best practice**: Jaga spacing konsisten antar card.
+
+---
+
+## ✅ Mini Contoh CSS Terpisah
+
+**Contoh flex sederhana**
+
+```css
+.toolbar {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+```
+
+**Contoh card**
+
+```css
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+```
+
+**Contoh form styling**
+
+```css
+button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+```
+
+---
+
+## 🧩 Implementasi ke Project Note App
+
+**Struktur folder**
+
+```
+note-app/
+  index.html
+  styles.css
+  assets/
+```
+
+**styles.css lengkap**
+
+```css
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  background: #f5f6f8;
+  color: #111827;
+}
+
+.page-header {
+  max-width: 960px;
+  margin: 32px auto 0;
+  padding: 0 20px;
+}
+
+.page-header h1 {
+  margin: 0 0 6px;
+  font-size: 32px;
+}
+
+.page {
+  max-width: 960px;
+  margin: 20px auto 40px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.note-form form {
+  display: grid;
+  gap: 12px;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.note-form input,
+.note-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font: inherit;
+}
+
+.note-form input:focus,
+.note-form textarea:focus {
+  outline: 2px solid #2563eb;
+  border-color: transparent;
+}
+
+.note-form button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.note-list {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.note-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.page-footer {
+  max-width: 960px;
+  margin: 0 auto 32px;
+  padding: 0 20px;
+  color: #6b7280;
+}
+```
+
+**Penjelasan per bagian**
+
+- **Layout tengah**: `max-width` + `margin: 0 auto`.
+- **Header rapi**: judul besar dengan spacing rapi.
+- **Form card**: background putih + shadow halus.
+- **Input & textarea**: padding nyaman dan fokus jelas.
+- **Tombol modern**: warna utama dan radius.
+- **Daftar catatan**: grid responsif dengan card.
+- **Warna netral**: background soft, teks gelap, aksen biru.
+
+---
+
+## 📄 Kode Final styles.css Lengkap
+
+```css
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  background: #f5f6f8;
+  color: #111827;
+}
+
+.page-header {
+  max-width: 960px;
+  margin: 32px auto 0;
+  padding: 0 20px;
+}
+
+.page-header h1 {
+  margin: 0 0 6px;
+  font-size: 32px;
+}
+
+.page {
+  max-width: 960px;
+  margin: 20px auto 40px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.note-form form {
+  display: grid;
+  gap: 12px;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.note-form input,
+.note-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font: inherit;
+}
+
+.note-form input:focus,
+.note-form textarea:focus {
+  outline: 2px solid #2563eb;
+  border-color: transparent;
+}
+
+.note-form button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.note-list {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.note-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.page-footer {
+  max-width: 960px;
+  margin: 0 auto 32px;
+  padding: 0 20px;
+  color: #6b7280;
+}
+```
+
+---
+
+## 🎨 Hasil Tampilan yang Diharapkan
+
+- Layout clean dan terpusat.
+- Header jelas dan rapi.
+- Form modern seperti card.
+- Card catatan tampil konsisten dan berjarak.
+- Warna netral minimalis dengan aksen biru.
+
+---
+
+## ✅ Checklist Hasil Belajar
+
+- Siswa paham selector CSS.
+- Siswa bisa styling layout dasar.
+- Siswa bisa styling form dengan baik.
+- Siswa bisa membuat card UI sederhana.
