@@ -1,6 +1,358 @@
 ---
-title: Pertemuan 4 - Coming Soon
-description: Materi akan segera tersedia.
+title: Pertemuan 4 - State, Event Handling, dan Conditional Rendering
+description: Lanjutan Note App dari pertemuan 3 dengan state interaktif, handler event, dan UI kondisional.
 ---
 
-## Coming Soon
+### 🧭 Pembuka
+
+Di pertemuan 3, Note App kamu masih berbasis data statis. Di pertemuan 4 ini, project yang sama kita lanjutkan supaya jadi interaktif: user bisa menambah, menghapus, dan melihat perubahan UI secara real-time lewat state React.
+
+### 🎯 Tujuan Pembelajaran
+
+- Mahasiswa mampu memakai `useState`, `useEffect`, dan `useReducer`.
+- Mahasiswa mampu menerapkan event handling pada form dan tombol aksi.
+- Mahasiswa mampu menerapkan conditional rendering untuk berbagai kondisi UI.
+- Mahasiswa memahami alasan pemisahan state ke reducer saat logic mulai kompleks.
+
+---
+
+## 1) 📁 Titik Lanjut dari Pertemuan 3
+
+Gunakan folder proyek `note-app` yang sama dari pertemuan 3. Struktur awal minimal:
+
+<Tree className="h-72 rounded-md border bg-background p-2">
+  <Folder value="p4-note-root" element="note-app">
+    <Folder value="p4-src" element="src">
+      <Folder value="p4-components" element="components">
+        <File value="p4-noteheader">NoteHeader.tsx</File>
+        <File value="p4-notecard">NoteCard.tsx</File>
+        <File value="p4-notelist">NoteList.tsx</File>
+      </Folder>
+      <Folder value="p4-types" element="types">
+        <File value="p4-note-type">note.ts</File>
+      </Folder>
+      <File value="p4-app">App.tsx</File>
+      <File value="p4-main">main.tsx</File>
+    </Folder>
+  </Folder>
+</Tree>
+
+Target akhir pertemuan 4:
+
+<Tree className="h-72 rounded-md border bg-background p-2">
+  <Folder value="p4-note-root-target" element="note-app">
+    <Folder value="p4-src-target" element="src">
+      <Folder value="p4-components-target" element="components">
+        <File value="p4-noteheader-target">NoteHeader.tsx</File>
+        <File value="p4-noteform-target">NoteForm.tsx</File>
+        <File value="p4-notecard-target">NoteCard.tsx</File>
+        <File value="p4-notelist-target">NoteList.tsx</File>
+      </Folder>
+      <Folder value="p4-reducers-target" element="reducers">
+        <File value="p4-note-reducer-target">noteReducer.ts</File>
+      </Folder>
+      <Folder value="p4-types-target" element="types">
+        <File value="p4-note-type-target">note.ts</File>
+      </Folder>
+      <File value="p4-app-target">App.tsx</File>
+      <File value="p4-main-target">main.tsx</File>
+    </Folder>
+  </Folder>
+</Tree>
+
+---
+
+## 2) 🧩 Implementasi Bertahap
+
+### Langkah 1 — Membuat reducer untuk state catatan
+
+**Tujuan**
+
+- Mengelola perubahan state dengan pola action agar mudah diskalakan.
+
+**Buat file baru** `src/reducers/noteReducer.ts`
+
+```ts
+import type { Note } from "../types/note";
+
+export type NotesState = {
+  items: Note[];
+  submitting: boolean;
+  message: string | null;
+};
+
+export type NotesAction =
+  | { type: "add_start" }
+  | { type: "add_success"; payload: Note }
+  | { type: "add_error"; payload: string }
+  | { type: "remove"; payload: string }
+  | { type: "clear_message" };
+
+export const initialNotesState: NotesState = {
+  items: [
+    { id: "n-1", title: "Setup proyek", body: "Gunakan Vite + React." },
+    { id: "n-2", title: "Desain UI", body: "Buat layout dengan CSS." },
+  ],
+  submitting: false,
+  message: null,
+};
+
+export function noteReducer(state: NotesState, action: NotesAction): NotesState {
+  switch (action.type) {
+    case "add_start":
+      return { ...state, submitting: true, message: null };
+    case "add_success":
+      return {
+        ...state,
+        submitting: false,
+        items: [action.payload, ...state.items],
+        message: "Catatan berhasil ditambahkan",
+      };
+    case "add_error":
+      return { ...state, submitting: false, message: action.payload };
+    case "remove":
+      return {
+        ...state,
+        items: state.items.filter((note) => note.id !== action.payload),
+        message: "Catatan berhasil dihapus",
+      };
+    case "clear_message":
+      return { ...state, message: null };
+    default:
+      return state;
+  }
+}
+```
+
+**Verifikasi**
+
+1. Simpan file dan cek tidak ada error TypeScript.
+2. Pastikan path import `../types/note` sesuai struktur folder.
+
+### Langkah 2 — Membuat komponen form dengan event handling
+
+**Tujuan**
+
+- Menangkap input user dan mengirim data ke parent component.
+
+**Buat file baru** `src/components/NoteForm.tsx`
+
+```tsx
+import { useState } from "react";
+
+type NoteFormProps = {
+  onAddNote: (title: string, body: string) => void;
+  submitting: boolean;
+};
+
+export function NoteForm({ onAddNote, submitting }: NoteFormProps) {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    onAddNote(title, body);
+    setTitle("");
+    setBody("");
+  }
+
+  return (
+    <section className="note-form">
+      <h2>Catatan Baru</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Judul
+          <input
+            type="text"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder="Contoh: Rangkuman kelas"
+          />
+        </label>
+        <label>
+          Isi
+          <textarea
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+            placeholder="Tulis isi catatan..."
+          />
+        </label>
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Menyimpan..." : "Simpan"}
+        </button>
+      </form>
+    </section>
+  );
+}
+```
+
+**Verifikasi**
+
+1. Cek input dapat diketik.
+2. Saat submit, browser tidak reload karena `event.preventDefault()`.
+
+### Langkah 3 — Menambahkan aksi event pada kartu catatan
+
+**Tujuan**
+
+- Menangani aksi hapus per item dengan event tombol.
+
+**Ubah file** `src/components/NoteCard.tsx`
+
+```tsx
+type NoteCardProps = {
+  id: string;
+  title: string;
+  body?: string;
+  onDelete: (id: string) => void;
+};
+
+export function NoteCard({
+  id,
+  title,
+  body = "Belum ada isi catatan.",
+  onDelete,
+}: NoteCardProps) {
+  return (
+    <article className="note-card">
+      <h3>{title}</h3>
+      <p>{body}</p>
+      <button type="button" onClick={() => onDelete(id)}>
+        Hapus
+      </button>
+    </article>
+  );
+}
+```
+
+**Verifikasi**
+
+1. Tombol hapus muncul pada setiap card.
+2. Klik tombol memanggil callback `onDelete`.
+
+### Langkah 4 — Conditional rendering di daftar catatan
+
+**Tujuan**
+
+- Menampilkan UI berbeda saat data kosong.
+
+**Ubah file** `src/components/NoteList.tsx`
+
+```tsx
+import { NoteCard } from "./NoteCard";
+import type { Note } from "../types/note";
+
+type NoteListProps = {
+  notes: Note[];
+  onDeleteNote: (id: string) => void;
+};
+
+export function NoteList({ notes, onDeleteNote }: NoteListProps) {
+  if (notes.length === 0) {
+    return <p>Belum ada catatan. Tambahkan catatan pertama kamu.</p>;
+  }
+
+  return (
+    <section className="note-list">
+      {notes.map((note) => (
+        <NoteCard
+          key={note.id}
+          id={note.id}
+          title={note.title}
+          body={note.body}
+          onDelete={onDeleteNote}
+        />
+      ))}
+    </section>
+  );
+}
+```
+
+**Verifikasi**
+
+1. Hapus semua catatan.
+2. Pastikan teks empty state tampil.
+
+### Langkah 5 — Integrasi reducer, event, dan efek samping di App
+
+**Tujuan**
+
+- Menyatukan form, list, reducer, dan pesan status di satu alur.
+
+**Ubah file** `src/App.tsx`
+
+```tsx
+import { useEffect, useReducer } from "react";
+import { NoteHeader } from "./components/NoteHeader";
+import { NoteForm } from "./components/NoteForm";
+import { NoteList } from "./components/NoteList";
+import { initialNotesState, noteReducer } from "./reducers/noteReducer";
+import type { Note } from "./types/note";
+
+export default function App() {
+  const [state, dispatch] = useReducer(noteReducer, initialNotesState);
+
+  function handleAddNote(title: string, body: string) {
+    if (!title.trim()) {
+      dispatch({ type: "add_error", payload: "Judul catatan wajib diisi" });
+      return;
+    }
+    dispatch({ type: "add_start" });
+    const nextNote: Note = {
+      id: crypto.randomUUID(),
+      title: title.trim(),
+      body: body.trim(),
+    };
+    dispatch({ type: "add_success", payload: nextNote });
+  }
+
+  function handleDeleteNote(id: string) {
+    dispatch({ type: "remove", payload: id });
+  }
+
+  useEffect(() => {
+    if (!state.message) return;
+    const timer = window.setTimeout(() => {
+      dispatch({ type: "clear_message" });
+    }, 2000);
+    return () => window.clearTimeout(timer);
+  }, [state.message]);
+
+  return (
+    <main className="page">
+      <NoteHeader />
+      {state.message ? <p>{state.message}</p> : null}
+      <NoteForm onAddNote={handleAddNote} submitting={state.submitting} />
+      <NoteList notes={state.items} onDeleteNote={handleDeleteNote} />
+    </main>
+  );
+}
+```
+
+**Verifikasi**
+
+1. Tambah catatan baru dan cek langsung muncul di paling atas.
+2. Coba submit tanpa judul, pastikan pesan error muncul.
+3. Hapus satu catatan, pastikan item hilang dari daftar.
+4. Tunggu 2 detik, pastikan pesan status hilang otomatis.
+
+---
+
+## 3) 🧪 Checklist Uji Fungsional Pertemuan 4
+
+Jalankan setelah semua langkah selesai:
+
+1. `npm run dev` berjalan tanpa error compile.
+2. Form bisa menerima input dan submit.
+3. Tombol hapus bekerja pada item yang benar.
+4. Empty state tampil saat list kosong.
+5. Pesan status muncul dan hilang otomatis.
+
+---
+
+## ✅ Capaian Akhir
+
+- Note App tidak lagi statis, sudah interaktif berbasis state.
+- Event handling form dan tombol aksi berjalan konsisten.
+- Conditional rendering dipakai untuk empty state dan status message.
+- Struktur state lebih terkontrol dengan `useReducer`.

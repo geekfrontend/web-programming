@@ -3,25 +3,28 @@ title: Pertemuan 1 - HTML Dasar
 description: Pengenalan HTML, semantic tags, dan struktur halaman web sederhana.
 ---
 
-## 📌 Pertemuan 1: HTML Dasar
-
----
-
 ### 🧭 Pembuka
 
 **Deskripsi singkat**  
-HTML adalah fondasi semua halaman web. Di pertemuan ini kamu akan mengenal tag-tag inti yang paling sering dipakai dan memahami cara menyusun halaman dengan struktur yang rapi.
+HTML adalah fondasi semua halaman web. Di pertemuan ini kamu akan fokus ke struktur HTML dulu sebagai fase pertama mini proyek Note App, lalu styling CSS dilanjutkan di pertemuan 2.
 
 **Tujuan pembelajaran**
 
 - Memahami struktur dokumen HTML dari awal sampai akhir.
 - Mengenal tag-tag penting dan kapan menggunakannya.
 - Mampu membuat satu halaman HTML sederhana.
-- Siap menerapkan struktur ke studi kasus Note App.
+- Menyelesaikan kerangka HTML mini proyek untuk dilanjutkan di pertemuan 2.
 
 ---
 
-## � Konsep Dasar HTML (Teori + Contoh Tag)
+## 🔗 Konteks Mini Proyek Pertemuan 1–2
+
+Pertemuan 1 dan 2 adalah satu mini proyek yang sama. Urutannya:
+
+1. **Pertemuan 1 (HTML)**: menyusun struktur halaman Note App.
+2. **Pertemuan 2 (CSS)**: mempercantik dan menata layout dari HTML yang sudah jadi.
+
+## 🧠 Konsep Dasar HTML (Teori + Contoh Tag)
 
 ### doctype
 
@@ -514,16 +517,19 @@ HTML adalah fondasi semua halaman web. Di pertemuan ini kamu akan mengenal tag-t
 ## 🧩 Implementasi Project: Note App
 
 **Penjelasan project**  
-Kita akan membuat halaman Note App sederhana dengan struktur semantic, form input judul dan isi, daftar catatan dummy, dan footer.
+Di fase ini kita membuat struktur HTML Note App: semantic layout, form input judul-isi, daftar catatan dummy, dan footer. Styling visual akan diselesaikan di pertemuan 2 menggunakan CSS.
 
-**Struktur folder**
+**File-tree mini proyek**
 
-```
-note-app/
-  index.html
-  styles.css
-  assets/
-```
+<Tree className="h-52 rounded-md border bg-background p-2">
+  <Folder value="note-app-root-p1" element="note-app">
+    <File value="index-html-p1">index.html</File>
+    <File value="styles-css-p1">styles.css</File>
+    <Folder value="assets-folder-p1" element="assets">
+      <File value="note-image-p1">note-banner.png</File>
+    </Folder>
+  </Folder>
+</Tree>
 
 **HTML lengkap Note App**
 
@@ -587,3 +593,4 @@ note-app/
 - Memahami tag HTML penting dan fungsinya.
 - Mampu membuat halaman HTML lengkap.
 - Berhasil menyusun struktur Note App sederhana.
+- Siap lanjut styling Note App di pertemuan 2.

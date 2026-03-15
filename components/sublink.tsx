@@ -11,6 +11,11 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
+type RenderableRoute = Omit<EachRoute, "href" | "items"> & {
+  href: string;
+  items?: RenderableRoute[];
+};
+
 export default function SubLink({
   title,
   href,
@@ -18,7 +23,7 @@ export default function SubLink({
   noLink,
   level,
   isSheet,
-}: EachRoute & { level: number; isSheet: boolean }) {
+}: RenderableRoute & { level: number; isSheet: boolean }) {
   const path = usePathname();
   const [isOpen, setIsOpen] = useState(level == 0);
 
@@ -68,13 +73,13 @@ export default function SubLink({
           <div
             className={cn(
               "flex flex-col items-start sm:text-sm dark:text-stone-300/85 text-stone-800 ml-0.5 mt-2.5 gap-3",
-              level > 0 && "pl-4 border-l ml-1.5"
+              level > 0 && "pl-4 border-l ml-1.5",
             )}
           >
             {items?.map((innerLink) => {
               const modifiedItems = {
                 ...innerLink,
-                href: `${href + innerLink.href}`,
+                href: joinPath(href, innerLink.href),
                 level: level + 1,
                 isSheet,
               };
@@ -85,4 +90,10 @@ export default function SubLink({
       </Collapsible>
     </div>
   );
+}
+
+function joinPath(base: string, segment: string) {
+  const cleanBase = base.endsWith("/") ? base.slice(0, -1) : base;
+  const cleanSegment = segment.startsWith("/") ? segment.slice(1) : segment;
+  return `${cleanBase}/${cleanSegment}`;
 }

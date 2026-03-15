@@ -1,9 +1,7 @@
-// for page navigation & to sort on leftbar
-
 export type EachRoute = {
   title: string;
-  href: string;
-  noLink?: true; // noLink will create a route segment (section) but cannot be navigated
+  href: `/${string}`;
+  noLink?: true;
   items?: EachRoute[];
 };
 
@@ -22,15 +20,15 @@ export const ROUTES: EachRoute[] = [
         href: "/pertemuan-2",
       },
       {
-        title: "Pertemuan 3: Coming Soon",
+        title: "Pertemuan 3: React JS + Vite untuk Note App",
         href: "/pertemuan-3",
       },
       {
-        title: "Pertemuan 4: Coming Soon",
+        title: "Pertemuan 4: State Management Dasar",
         href: "/pertemuan-4",
       },
       {
-        title: "Pertemuan 5: Coming Soon",
+        title: "Pertemuan 5: Form, Validasi, dan List Rendering di React",
         href: "/pertemuan-5",
       },
       {
@@ -83,22 +81,70 @@ export const ROUTES: EachRoute[] = [
 
 type Page = { title: string; href: string };
 
-function getRecurrsiveAllLinks(node: EachRoute): Page[] {
-  const ans: Page[] = [];
-  if (!node.noLink) {
-    ans.push({ title: node.title, href: node.href });
+function normalizeRouteHref(href: string): `/${string}` {
+  const trimmed = href.trim();
+  if (!trimmed) {
+    throw new Error("Route href tidak boleh kosong");
   }
-  node.items?.forEach((subNode) => {
-    // pastikan href anak tidak double slash
-    const temp = {
-      ...subNode,
-      href: `${node.href}${
-        subNode.href.startsWith("/") ? subNode.href : `/${subNode.href}`
-      }`,
-    };
-    ans.push(...getRecurrsiveAllLinks(temp));
-  });
-  return ans;
+  const withLeadingSlash = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  const normalized =
+    withLeadingSlash.length > 1
+      ? withLeadingSlash.replace(/\/+$/, "")
+      : withLeadingSlash;
+  if (normalized.includes("//")) {
+    throw new Error(`Route href tidak valid: ${href}`);
+  }
+  return normalized as `/${string}`;
 }
 
-export const page_routes = ROUTES.map((it) => getRecurrsiveAllLinks(it)).flat();
+function joinRouteHref(
+  parentHref: `/${string}`,
+  childHref: `/${string}`,
+): `/${string}` {
+  if (parentHref === "/") return normalizeRouteHref(childHref);
+  const joined = `${parentHref}/${childHref.replace(/^\/+/, "")}`;
+  return normalizeRouteHref(joined);
+}
+
+function validateRouteNode(
+  node: EachRoute,
+  fullHref: `/${string}`,
+  seen: Set<string>,
+) {
+  if (!node.title.trim()) {
+    throw new Error(`Route title tidak boleh kosong: ${fullHref}`);
+  }
+  if (seen.has(fullHref)) {
+    throw new Error(`Duplikat route terdeteksi: ${fullHref}`);
+  }
+  seen.add(fullHref);
+}
+
+function getRecursiveAllLinks(
+  node: EachRoute,
+  parentHref?: `/${string}`,
+  seen = new Set<string>(),
+): Page[] {
+  const currentHref = parentHref
+    ? joinRouteHref(parentHref, normalizeRouteHref(node.href))
+    : normalizeRouteHref(node.href);
+
+  validateRouteNode(node, currentHref, seen);
+
+  const links: Page[] = [];
+  if (!node.noLink) {
+    links.push({ title: node.title, href: currentHref });
+  }
+  if (!node.items?.length) {
+    return links;
+  }
+
+  for (const item of node.items) {
+    links.push(...getRecursiveAllLinks(item, currentHref, seen));
+  }
+  return links;
+}
+
+export const page_routes = ROUTES.flatMap((route) =>
+  getRecursiveAllLinks(route),
+);

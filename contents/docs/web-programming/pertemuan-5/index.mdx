@@ -1,6 +1,358 @@
 ---
-title: Pertemuan 5 - Coming Soon
-description: Materi akan segera tersedia.
+title: Pertemuan 5 - Form, Validasi, dan List Rendering di React
+description: Lanjutan Note App dari pertemuan 4 dengan validasi form, pencarian, dan list rendering yang lebih rapi.
 ---
 
-## Coming Soon
+### 🧭 Pembuka
+
+Di pertemuan 4, Note App sudah interaktif memakai reducer, event handling, dan conditional rendering dasar. Di pertemuan 5 ini, kita lanjutkan project yang sama supaya lebih siap dipakai user: form divalidasi, list bisa dicari, dan render data lebih informatif.
+
+### 🎯 Tujuan Pembelajaran
+
+- Mahasiswa mampu membuat form React yang tervalidasi.
+- Mahasiswa mampu menampilkan pesan error yang jelas dan konsisten.
+- Mahasiswa mampu menerapkan list rendering dari data state.
+- Mahasiswa mampu menerapkan filter/pencarian tanpa mengubah sumber data asli.
+
+---
+
+## 1) 📁 Titik Lanjut dari Pertemuan 4
+
+Mulai dari folder hasil akhir pertemuan 4:
+
+<Tree className="h-72 rounded-md border bg-background p-2">
+  <Folder value="p5-root-start" element="note-app">
+    <Folder value="p5-src-start" element="src">
+      <Folder value="p5-components-start" element="components">
+        <File value="p5-noteheader-start">NoteHeader.tsx</File>
+        <File value="p5-noteform-start">NoteForm.tsx</File>
+        <File value="p5-notecard-start">NoteCard.tsx</File>
+        <File value="p5-notelist-start">NoteList.tsx</File>
+      </Folder>
+      <Folder value="p5-reducers-start" element="reducers">
+        <File value="p5-note-reducer-start">noteReducer.ts</File>
+      </Folder>
+      <Folder value="p5-types-start" element="types">
+        <File value="p5-note-type-start">note.ts</File>
+      </Folder>
+      <File value="p5-app-start">App.tsx</File>
+    </Folder>
+  </Folder>
+</Tree>
+
+Target akhir pertemuan 5:
+
+<Tree className="h-80 rounded-md border bg-background p-2">
+  <Folder value="p5-root-target" element="note-app">
+    <Folder value="p5-src-target" element="src">
+      <Folder value="p5-components-target" element="components">
+        <File value="p5-noteheader-target">NoteHeader.tsx</File>
+        <File value="p5-searchbar-target">SearchBar.tsx</File>
+        <File value="p5-noteform-target">NoteForm.tsx</File>
+        <File value="p5-notecard-target">NoteCard.tsx</File>
+        <File value="p5-notelist-target">NoteList.tsx</File>
+      </Folder>
+      <Folder value="p5-reducers-target" element="reducers">
+        <File value="p5-note-reducer-target">noteReducer.ts</File>
+      </Folder>
+      <Folder value="p5-types-target" element="types">
+        <File value="p5-note-type-target">note.ts</File>
+      </Folder>
+      <Folder value="p5-utils-target" element="utils">
+        <File value="p5-note-validation-target">noteValidation.ts</File>
+      </Folder>
+      <File value="p5-app-target">App.tsx</File>
+    </Folder>
+  </Folder>
+</Tree>
+
+---
+
+## 2) 🧩 Implementasi Bertahap
+
+### Langkah 1 — Membuat util validasi form
+
+**Tujuan**
+
+- Memisahkan logic validasi agar komponen form tetap rapi.
+
+**Buat file baru** `src/utils/noteValidation.ts`
+
+```ts
+export type NoteFormValues = {
+  title: string;
+  body: string;
+};
+
+export type NoteFormErrors = {
+  title?: string;
+  body?: string;
+};
+
+export function validateNoteForm(values: NoteFormValues): NoteFormErrors {
+  const errors: NoteFormErrors = {};
+
+  if (!values.title.trim()) {
+    errors.title = "Judul wajib diisi";
+  } else if (values.title.trim().length < 3) {
+    errors.title = "Judul minimal 3 karakter";
+  }
+
+  if (values.body.trim().length > 250) {
+    errors.body = "Isi catatan maksimal 250 karakter";
+  }
+
+  return errors;
+}
+```
+
+**Verifikasi**
+
+1. Simpan file dan cek tidak ada error.
+2. Pastikan tipe `NoteFormErrors` dikenali saat di-import.
+
+### Langkah 2 — Upgrade `NoteForm` dengan validasi
+
+**Tujuan**
+
+- Menampilkan error sebelum data dikirim ke reducer.
+
+**Ubah file** `src/components/NoteForm.tsx`
+
+```tsx
+import { useState } from "react";
+import { validateNoteForm, type NoteFormErrors } from "../utils/noteValidation";
+
+type NoteFormProps = {
+  onAddNote: (title: string, body: string) => void;
+  submitting: boolean;
+};
+
+export function NoteForm({ onAddNote, submitting }: NoteFormProps) {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [errors, setErrors] = useState<NoteFormErrors>({});
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const nextErrors = validateNoteForm({ title, body });
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+    onAddNote(title, body);
+    setTitle("");
+    setBody("");
+    setErrors({});
+  }
+
+  return (
+    <section className="note-form">
+      <h2>Catatan Baru</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Judul
+          <input
+            type="text"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder="Contoh: Rangkuman kelas"
+          />
+        </label>
+        {errors.title ? <p>{errors.title}</p> : null}
+        <label>
+          Isi
+          <textarea
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+            placeholder="Tulis isi catatan..."
+          />
+        </label>
+        <p>{body.length}/250 karakter</p>
+        {errors.body ? <p>{errors.body}</p> : null}
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Menyimpan..." : "Simpan"}
+        </button>
+      </form>
+    </section>
+  );
+}
+```
+
+**Verifikasi**
+
+1. Submit judul kosong, pastikan pesan error muncul.
+2. Isi body lebih dari 250 karakter, pastikan validasi aktif.
+3. Isi data valid, pastikan catatan tetap bisa ditambahkan.
+
+### Langkah 3 — Menambah komponen pencarian
+
+**Tujuan**
+
+- Memberi kontrol filter tanpa mengubah data `state.items`.
+
+**Buat file baru** `src/components/SearchBar.tsx`
+
+```tsx
+type SearchBarProps = {
+  query: string;
+  onChangeQuery: (value: string) => void;
+};
+
+export function SearchBar({ query, onChangeQuery }: SearchBarProps) {
+  return (
+    <section className="note-search">
+      <label>
+        Cari Catatan
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => onChangeQuery(event.target.value)}
+          placeholder="Cari berdasarkan judul atau isi"
+        />
+      </label>
+    </section>
+  );
+}
+```
+
+**Verifikasi**
+
+1. Input search tampil di halaman.
+2. Setiap ketikan mengubah state query.
+
+### Langkah 4 — Integrasi list rendering berbasis hasil filter
+
+**Tujuan**
+
+- Menampilkan daftar yang relevan berdasarkan input pencarian.
+
+**Ubah file** `src/App.tsx`
+
+```tsx
+import { useMemo, useReducer, useState } from "react";
+import { NoteHeader } from "./components/NoteHeader";
+import { NoteForm } from "./components/NoteForm";
+import { NoteList } from "./components/NoteList";
+import { SearchBar } from "./components/SearchBar";
+import { initialNotesState, noteReducer } from "./reducers/noteReducer";
+import type { Note } from "./types/note";
+
+export default function App() {
+  const [state, dispatch] = useReducer(noteReducer, initialNotesState);
+  const [query, setQuery] = useState("");
+
+  function handleAddNote(title: string, body: string) {
+    dispatch({ type: "add_start" });
+    const nextNote: Note = {
+      id: crypto.randomUUID(),
+      title: title.trim(),
+      body: body.trim(),
+    };
+    dispatch({ type: "add_success", payload: nextNote });
+  }
+
+  function handleDeleteNote(id: string) {
+    dispatch({ type: "remove", payload: id });
+  }
+
+  const filteredNotes = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) return state.items;
+    return state.items.filter((note) => {
+      const title = note.title.toLowerCase();
+      const body = note.body.toLowerCase();
+      return title.includes(normalizedQuery) || body.includes(normalizedQuery);
+    });
+  }, [query, state.items]);
+
+  return (
+    <main className="page">
+      <NoteHeader />
+      <SearchBar query={query} onChangeQuery={setQuery} />
+      <p>Total catatan: {state.items.length}</p>
+      <p>Hasil ditampilkan: {filteredNotes.length}</p>
+      <NoteForm onAddNote={handleAddNote} submitting={state.submitting} />
+      <NoteList
+        notes={filteredNotes}
+        onDeleteNote={handleDeleteNote}
+        emptyMessage={
+          query.trim()
+            ? "Catatan tidak ditemukan. Coba kata kunci lain."
+            : "Belum ada catatan. Tambahkan catatan pertama kamu."
+        }
+      />
+    </main>
+  );
+}
+```
+
+**Verifikasi**
+
+1. Ketik kata kunci yang cocok, list terfilter sesuai input.
+2. Ketik kata kunci yang tidak cocok, list kosong.
+3. Counter total dan hasil tampil memperlihatkan perbedaan.
+
+### Langkah 5 — Menyesuaikan `NoteList` untuk empty state dinamis
+
+**Tujuan**
+
+- Menjaga komponen list reusable untuk berbagai konteks kondisi kosong.
+
+**Ubah file** `src/components/NoteList.tsx`
+
+```tsx
+import { NoteCard } from "./NoteCard";
+import type { Note } from "../types/note";
+
+type NoteListProps = {
+  notes: Note[];
+  onDeleteNote: (id: string) => void;
+  emptyMessage: string;
+};
+
+export function NoteList({ notes, onDeleteNote, emptyMessage }: NoteListProps) {
+  if (notes.length === 0) {
+    return <p>{emptyMessage}</p>;
+  }
+
+  return (
+    <section className="note-list">
+      {notes.map((note) => (
+        <NoteCard
+          key={note.id}
+          id={note.id}
+          title={note.title}
+          body={note.body}
+          onDelete={onDeleteNote}
+        />
+      ))}
+    </section>
+  );
+}
+```
+
+**Verifikasi**
+
+1. Saat query kosong dan data habis, empty message default tampil.
+2. Saat query tidak cocok, empty message khusus pencarian tampil.
+
+---
+
+## 3) 🧪 Checklist Uji Fungsional Pertemuan 5
+
+Lakukan pengecekan ini setelah implementasi:
+
+1. Form menolak input tidak valid dengan pesan jelas.
+2. Karakter body terhitung dan batas 250 karakter terkontrol.
+3. Proses tambah catatan tetap berhasil saat data valid.
+4. List merender data dari state secara konsisten.
+5. Search/filter bekerja tanpa menghapus data asli.
+6. Empty state berubah sesuai konteks pencarian.
+
+---
+
+## ✅ Capaian Akhir
+
+- Form input sudah tervalidasi dan lebih aman dipakai user.
+- List rendering lebih matang dengan hasil filter real-time.
+- Komponen makin modular: validasi di `utils`, pencarian di `SearchBar`.
+- Note App siap lanjut ke materi routing dan integrasi API pada sesi berikutnya.

@@ -3,14 +3,10 @@ title: Pertemuan 2 - CSS Dasar
 description: Dasar CSS untuk mempercantik HTML dan menata layout Note App.
 ---
 
-## 📌 Pertemuan 2: CSS Dasar
-
----
-
 ### 🧭 Pembuka
 
 **Judul**: Pertemuan 2 – CSS Dasar  
-**Deskripsi singkat**: CSS membuat tampilan HTML lebih rapi, enak dibaca, dan responsif. Setelah memahami konsep dasar, kita terapkan langsung ke Note App.  
+**Deskripsi singkat**: CSS membuat tampilan HTML lebih rapi, enak dibaca, dan responsif. Pertemuan ini adalah lanjutan langsung dari HTML di pertemuan 1 untuk menyelesaikan mini proyek Note App.  
 **Tujuan pembelajaran**:
 
 - Siswa memahami cara menambahkan CSS ke HTML.
@@ -18,14 +14,14 @@ description: Dasar CSS untuk mempercantik HTML dan menata layout Note App.
 - Siswa mampu menata layout, typography, dan form.
 - Siswa dapat membuat tampilan Note App yang modern dan minimalis.
 
----
+### 🔗 Kaitan dengan Pertemuan 1
 
-## 🧠 Konsep Dasar CSS
+Pada pertemuan 1, kamu sudah membangun struktur HTML Note App.  
+Pada pertemuan 2, struktur yang sama akan dipoles menggunakan CSS sampai tampilannya siap dipakai.
 
-### Cara Menambahkan CSS
+### Cara Menambahkan CSS ke HTML
 
-**Penjelasan sederhana**: CSS bisa ditulis inline, internal, atau di file terpisah.  
-**Contoh kode**:
+**Contoh 3 cara menulis CSS**:
 
 ```html
 <p style="color: blue;">Inline CSS</p>
@@ -36,6 +32,12 @@ description: Dasar CSS untuk mempercantik HTML dan menata layout Note App.
 </style>
 <link rel="stylesheet" href="styles.css" />
 ```
+
+**Penjelasan**:
+
+- Inline CSS: ditulis langsung di atribut elemen.
+- Internal CSS: ditulis di tag `style` dalam HTML.
+- External CSS: ditulis di file terpisah seperti `styles.css`.
 
 **Kapan digunakan**:
 
@@ -239,7 +241,19 @@ button {
 
 ## 🧩 Implementasi ke Project Note App
 
-**Struktur folder**
+**File-tree mini proyek (gabungan pertemuan 1 + 2)**
+
+<Tree className="h-52 rounded-md border bg-background p-2">
+  <Folder value="note-app-root" element="note-app">
+    <File value="index-html">index.html</File>
+    <File value="styles-css">styles.css</File>
+    <Folder value="assets-folder" element="assets">
+      <File value="note-image">note-banner.png</File>
+    </Folder>
+  </Folder>
+</Tree>
+
+**Versi teks**
 
 ```
 note-app/

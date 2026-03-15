@@ -2,6 +2,11 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { EachRoute, ROUTES } from "./routes-config";
 
+type SearchRoute = Omit<EachRoute, "href" | "items"> & {
+  href: string;
+  items?: SearchRoute[];
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -13,7 +18,7 @@ export function helperSearch(
   currenLevel: number,
   maxLevel?: number
 ) {
-  const res: EachRoute[] = [];
+  const res: SearchRoute[] = [];
   let parentHas = false;
 
   const nextLink = `${prefix}${node.href}`;

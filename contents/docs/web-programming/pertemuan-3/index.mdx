@@ -3,37 +3,162 @@ title: Pertemuan 3 - React JS + Vite untuk Note App
 description: Setup React dengan Vite dan memecah UI Note App menjadi komponen.
 ---
 
-## 📌 Pertemuan 3: React JS + Vite untuk Note App
+### 🧭 Pembuka
 
-Pertemuan ini membahas cara memulai React menggunakan Vite dan memecah UI Note App menjadi komponen agar lebih mudah dikembangkan.
-
----
+Pertemuan ini mengikuti judul resmi **Pertemuan 3: React JS + Vite untuk Note App**. Alur materi disusun mengikuti workflow nyata: install proyek, pahami struktur folder hasil install, lalu lanjut coding bertahap dengan verifikasi di setiap langkah.
 
 ### 🎯 Tujuan Pembelajaran
 
-- Menginisialisasi proyek React dengan Vite.
-- Memahami JSX dan struktur komponen.
-- Membagi UI Note App menjadi komponen reusable.
-- Merender list catatan dari data statis.
+- Menyiapkan proyek React TypeScript dengan Vite dari nol.
+- Memahami struktur proyek bawaan setelah instalasi.
+- Membangun komponen Note App secara bertahap.
+- Mengintegrasikan antar-komponen dengan props bertipe.
+- Menguji fungsionalitas setiap file yang dibuat.
 
 ---
 
-### 🚀 Setup React dengan Vite
+## 1) 🚀 Instalasi dan Setup React + Vite
+
+### Prasyarat
+
+- Node.js versi LTS sudah terpasang.
+- npm sudah tersedia dari instalasi Node.js.
+- Terminal bisa menjalankan `node -v` dan `npm -v`.
+- Editor kode siap digunakan.
+
+### Langkah Setup Detail
 
 ```bash
-npm create vite@latest note-app -- --template react
+node -v
+npm -v
+npm create vite@latest note-app -- --template react-ts
 cd note-app
 npm install
 npm run dev
 ```
 
+### Verifikasi Hasil Instalasi
+
+1. Setelah `npm run dev`, terminal menampilkan URL lokal.
+2. Buka URL tersebut di browser.
+3. Jika halaman React + Vite tampil, setup berhasil.
+4. Ubah teks di `src/App.tsx`, simpan, lalu cek browser untuk memastikan hot reload berjalan.
+
+### Perintah Tambahan
+
+```bash
+npm run build
+npm run preview
+```
+
+- `npm run build` menghasilkan build production.
+- `npm run preview` menjalankan hasil build secara lokal.
+
 ---
 
-### 🧠 Materi Utama
+## 2) 🗂️ Struktur Proyek Setelah Install
 
-#### 1. Komponen Dasar
+### File-tree setelah instalasi
 
-```jsx
+<Tree className="h-[26rem] rounded-md border bg-background p-2">
+  <Folder value="vite-root-p3" element="note-app">
+    <Folder value="public-folder-p3" element="public">
+      <File value="favicon-file-p3">favicon.svg</File>
+      <File value="icons-file-p3">icons.svg</File>
+    </Folder>
+    <Folder value="src-folder-p3" element="src">
+      <Folder value="assets-folder-p3" element="assets">
+        <File value="hero-file-p3">hero.png</File>
+        <File value="react-svg-file-p3">react.svg</File>
+        <File value="vite-svg-file-p3">vite.svg</File>
+      </Folder>
+      <File value="app-css-file-p3">App.css</File>
+      <File value="app-file-p3">App.tsx</File>
+      <File value="index-css-file-p3">index.css</File>
+      <File value="main-file-p3">main.tsx</File>
+    </Folder>
+    <Folder value="node-modules-folder-p3" element="node_modules">
+      <File value="deps-file-p3">dependencies</File>
+    </Folder>
+    <File value="gitignore-file-p3">.gitignore</File>
+    <File value="eslint-config-file-p3">eslint.config.js</File>
+    <File value="index-html-root-p3">index.html</File>
+    <File value="package-lock-p3">package-lock.json</File>
+    <File value="package-json-p3">package.json</File>
+    <File value="readme-file-p3">README.md</File>
+    <File value="tsconfig-app-p3">tsconfig.app.json</File>
+    <File value="tsconfig-node-p3">tsconfig.node.json</File>
+    <File value="tsconfig-p3">tsconfig.json</File>
+    <File value="vite-config-p3">vite.config.ts</File>
+    <Folder value="dist-folder-p3" element="dist (setelah npm run build)">
+      <File value="bundle-file-p3">assets</File>
+      <File value="index-build-file-p3">index.html</File>
+    </Folder>
+  </Folder>
+</Tree>
+
+### Fungsi folder utama
+
+- `src`: tempat utama kode aplikasi React, termasuk entry app dan styles.
+- `public`: file statis yang bisa diakses langsung tanpa import dari `src`.
+- `node_modules`: kumpulan package dependency yang diinstall npm.
+- `dist`: hasil akhir build production, folder ini muncul setelah `npm run build`.
+
+### Penjelasan file konfigurasi
+
+- `vite.config.ts`: konfigurasi Vite seperti plugin, alias, dan opsi server/build.
+- `package.json`: daftar script (`dev`, `build`, `preview`) dan dependency.
+- `eslint.config.js`: aturan linting agar kualitas kode konsisten.
+- `index.html`: entry point utama yang memuat aplikasi React.
+- `tsconfig.json`: konfigurasi TypeScript utama untuk referensi project.
+- `tsconfig.app.json`: konfigurasi TypeScript khusus kode aplikasi frontend.
+- `tsconfig.node.json`: konfigurasi TypeScript untuk file tooling Node seperti Vite config.
+
+### Best practices organisasi proyek
+
+- Buat folder `src/components` saat mulai memecah UI jadi komponen kecil.
+- Buat folder `src/types` untuk tipe data yang dipakai lintas komponen.
+- Simpan asset lokal di `src/assets` atau `public` sesuai kebutuhan.
+- Simpan helper function di `src/utils` saat logic mulai bertambah.
+- Gunakan penamaan file konsisten: `PascalCase` untuk komponen.
+- Pisahkan style global (`index.css`) dan style komponen (`App.css`) agar maintainable.
+
+---
+
+## 3) 🧩 Tutorial Bertahap: Build Note App TypeScript
+
+Urutan di bawah mengikuti alur kerja pengembangan: buat file → isi kode → integrasi → verifikasi.
+
+### Langkah 1 — Siapkan tipe data utama
+
+**Tujuan**
+
+- Menentukan kontrak data catatan agar konsisten.
+
+**Buat file baru** `src/types/note.ts`
+
+```ts
+export type Note = {
+  id: string;
+  title: string;
+  body: string;
+};
+```
+
+**Verifikasi**
+
+- File tersimpan tanpa error.
+- Tidak ada tanda merah pada editor TypeScript.
+
+### Langkah 2 — Buat komponen header
+
+**Tujuan**
+
+- Menampilkan identitas halaman Note App.
+
+**Buat file baru** `src/components/NoteHeader.tsx`
+
+```tsx
 export function NoteHeader() {
   return (
     <header className="page-header">
@@ -44,10 +169,34 @@ export function NoteHeader() {
 }
 ```
 
-#### 2. Komponen dengan Props
+**Integrasi**
 
-```jsx
-export function NoteCard({ title, body }) {
+- Import `NoteHeader` ke `src/App.tsx`.
+- Render `<NoteHeader />` di dalam `<main>`.
+
+**Verifikasi**
+
+- Jalankan `npm run dev`.
+- Pastikan judul dan deskripsi muncul di browser.
+
+### Langkah 3 — Buat komponen kartu catatan
+
+**Tujuan**
+
+- Menampilkan satu item catatan dengan props bertipe.
+
+**Buat file baru** `src/components/NoteCard.tsx`
+
+```tsx
+type NoteCardProps = {
+  title: string;
+  body?: string;
+};
+
+export function NoteCard({
+  title,
+  body = "Belum ada isi catatan.",
+}: NoteCardProps) {
   return (
     <article className="note-card">
       <h3>{title}</h3>
@@ -57,16 +206,32 @@ export function NoteCard({ title, body }) {
 }
 ```
 
-#### 3. List Rendering
+**Integrasi**
 
-```jsx
-const notes = [
-  { id: "n-1", title: "Setup proyek", body: "Gunakan Vite + React." },
-  { id: "n-2", title: "Desain UI", body: "Buat layout dengan CSS." },
-  { id: "n-3", title: "Rencana fitur", body: "Tambah CRUD note." },
-];
+- Coba render satu `NoteCard` langsung di `App.tsx` untuk uji cepat.
 
-export function NoteList() {
+**Verifikasi**
+
+- Card tampil dengan benar.
+- Saat `body` tidak dikirim, teks default tampil.
+
+### Langkah 4 — Buat komponen daftar catatan
+
+**Tujuan**
+
+- Merender banyak catatan menggunakan `map`.
+
+**Buat file baru** `src/components/NoteList.tsx`
+
+```tsx
+import { NoteCard } from "./NoteCard";
+import type { Note } from "../types/note";
+
+type NoteListProps = {
+  notes: Note[];
+};
+
+export function NoteList({ notes }: NoteListProps) {
   return (
     <section className="note-list">
       {notes.map((note) => (
@@ -77,43 +242,157 @@ export function NoteList() {
 }
 ```
 
----
+**Integrasi**
 
-### 🧩 Studi Kasus: Menyusun App
+- `NoteList` akan dipanggil oleh `App.tsx` dengan props `notes`.
 
-```jsx
+**Verifikasi**
+
+- Tidak ada warning `key` di console browser.
+- Semua item array ditampilkan sebagai card.
+
+### Langkah 5 — Satukan semua komponen di App
+
+**Tujuan**
+
+- Menghubungkan data + header + list dalam satu halaman.
+
+**Ubah file** `src/App.tsx`
+
+```tsx
 import { NoteHeader } from "./components/NoteHeader";
 import { NoteList } from "./components/NoteList";
+import type { Note } from "./types/note";
+
+const notes: Note[] = [
+  { id: "n-1", title: "Setup proyek", body: "Gunakan Vite + React." },
+  { id: "n-2", title: "Desain UI", body: "Buat layout dengan CSS." },
+  { id: "n-3", title: "Rencana fitur", body: "Tambah CRUD note." },
+];
 
 export default function App() {
   return (
     <main className="page">
       <NoteHeader />
-      <NoteList />
+      <NoteList notes={notes} />
     </main>
   );
 }
 ```
 
+**Penjelasan komponen utama**
+
+- `NoteHeader`: menampilkan judul dan deskripsi aplikasi.
+- `NoteCard`: template card untuk satu catatan.
+- `NoteList`: mengubah array data menjadi daftar card.
+- `App`: orchestrator yang menggabungkan semua komponen.
+
+**Verifikasi**
+
+- UI menampilkan header dan 3 card.
+- Ubah isi salah satu object di `notes`, lalu simpan.
+- Pastikan perubahan langsung terlihat di browser.
+
+### Langkah 6 — Verifikasi setelah setiap pembuatan file
+
+Pakai checklist ini agar kualitas tetap aman:
+
+1. Simpan file dan cek error di editor.
+2. Pastikan dev server tidak menampilkan compile error.
+3. Cek tampilan di browser sesuai tujuan langkah.
+4. Coba ubah data kecil untuk memastikan integrasi aktif.
+5. Jika error muncul, cek import path dan tipe props dulu.
+
 ---
 
-### ✅ Checklist Hasil
+## 4) 🧠 Ringkasan Fundamental yang Dipakai
 
-- Proyek React berhasil berjalan di browser.
-- UI Note App terpecah menjadi komponen.
-- Data catatan dirender dari array statis.
+### TSX
+
+- TSX adalah JSX dengan TypeScript.
+- Ekspresi JavaScript tetap memakai `{}`.
+- Keunggulan utama: deteksi error tipe lebih awal.
+
+### Component
+
+- Functional component adalah pola utama.
+- Setiap komponen fokus pada satu tanggung jawab.
+- Nama komponen gunakan PascalCase.
+
+### Props
+
+- Props mengalir dari parent ke child.
+- Type props membuat kontrak data jelas.
+- Optional props + default value mencegah UI kosong.
+
+### Prop Drilling
+
+- Terjadi saat props harus lewat banyak level.
+- Jika struktur makin dalam, gunakan Context API.
 
 ---
 
-### 🧪 Tugas Mini
+## 5) 🔄 Flow Kerja Development sampai Production
 
-1. Tambahkan komponen `NoteForm` berisi input judul dan textarea.  
-2. Buat komponen `NoteFooter` berisi teks copyright.  
-3. Render semua komponen di `App.jsx`.  
+1. Jalankan `npm run dev` untuk development.
+2. Bangun fitur per komponen kecil dan terpisah.
+3. Uji fungsionalitas setelah setiap file dibuat.
+4. Lakukan pengecekan code quality sebelum rilis.
+5. Jalankan `npm run build` untuk produksi.
+6. Jalankan `npm run preview` untuk validasi hasil build.
+7. Deploy isi build sesuai platform hosting yang dipakai.
 
 ---
 
-### 📎 Referensi Cepat
+## 🛠️ Troubleshooting Umum
 
-- Vite: https://vitejs.dev/guide/  
-- React Components: https://react.dev/learn/your-first-component  
+### 1. `npm create vite@latest` gagal dijalankan
+
+- Cek koneksi internet.
+- Cek versi Node.js.
+- Coba ulang perintah setelah update npm:
+
+```bash
+npm install -g npm
+```
+
+### 2. Port development sudah dipakai
+
+- Hentikan proses yang memakai port tersebut.
+- Atau jalankan ulang dev server agar Vite memilih port lain.
+
+### 3. Modul tidak ditemukan
+
+- Pastikan `npm install` sudah selesai.
+- Cek penulisan path import.
+- Cek huruf besar-kecil nama file.
+
+### 4. Perubahan tidak muncul di browser
+
+- Simpan file dan lihat log terminal.
+- Hard refresh browser.
+- Restart `npm run dev` jika perlu.
+
+### 5. Build production gagal
+
+- Jalankan lint atau pengecekan error terlebih dahulu.
+- Periksa error pada import, sintaks TSX/JSX, atau dependency yang belum terpasang.
+
+---
+
+## ✅ Checklist Hasil Belajar
+
+- Setup React + Vite berjalan normal.
+- Memahami struktur proyek default hasil instalasi Vite TypeScript.
+- Memahami TSX, component, props bertipe, default value props, dan prop drilling.
+- Mampu menyusun komponen bertingkat dengan props.
+- Mampu membuat file bertahap, mengintegrasikan, dan menguji tiap langkah.
+- Paham struktur folder dan konfigurasi utama Vite.
+- Paham alur kerja dari development hingga production build.
+
+## 📎 Referensi Cepat
+
+- Vite: https://vitejs.dev/guide/
+- React JSX: https://react.dev/learn/writing-markup-with-jsx
+- React Components: https://react.dev/learn/your-first-component
+- React Passing Props: https://react.dev/learn/passing-props-to-a-component
